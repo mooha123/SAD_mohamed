@@ -52,6 +52,15 @@ public class EditableBufferedReader {
     }
     
     public void read(){
+    //llegeix el següent caràcter o la següent tecla de cursor.
+    // Supongo ==> Este metodo se invoca solo si readline lo ejecuta. 
+    //tendremos que utilizar ASCII?¿?¿?¿
     
+    //Primero debemos pasar a mode raw.
+    this.setRaw();
+    // ahora debemos leer, por lo tanto nos devuelve un numero de la tabla ASCII
+    int sim = super.read();
+    //No se si debemos retornar este numero o debemos pasarle la traduccion?¿¿??¿?
+
     } 
 }
