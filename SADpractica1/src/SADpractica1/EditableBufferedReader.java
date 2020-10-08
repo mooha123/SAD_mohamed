@@ -12,11 +12,58 @@ import java.io.BufferedReader;
  */
 public class EditableBufferedReader {
     //Atributos
+/*
+27 79 70 0 end
+27 79 72 0 home
+27 79 81 0 f2
+27 79 82 0 f3
+27 79 83 0 f4
+27 91 49 53 126 0 f5
+27 91 49 55 126 0 f6
+27 91 49 56 126 0 f7
+27 91 49 57 126 0 f8
+27 91 50 48 126 0 f9
+27 91 50 49 126 0 f10
+27 91 50 52 126 0 f12
+27 91 50 126 0 insert
+27 91 51 126 0 delete
+27 91 49 126 0 home
+27 91 52 126 0 end
+27 91 53 126 0 pageUp
+27 91 54 126 0 pageDown
+27 91 65 0 up
+27 91 66 0 down
+27 91 67 0 right
+27 91 68 0 left
+27 91 49 59 53 67 0 ctl-right
+27 91 49 59 53 68 0 ctl-left
+27 91 49 59 53 65 0 ctl-up
+27 91 49 59 53 66 0 ctl-down
+27 91 69 0 keypad-five
+9 0 tab
+33 0 bang
+35 0 pound
+36 0 dollarSign
+37 0 percent
+38 0 ampersand
+40 0 openParen
+*/
+    static final int ESCAPE = 27;
+    static final int EDICIO = 27;
+    static final int RIGHT = 67;
+    static final int LEFT = 68;
+    static final int HOME = 72;
+    static final int END = 70;
+    static final int INSERT = 50;
+    static final int DELETE = 51;
+    static final int BACKSPACE = 127;
+    static final int TILDE = 126;
     
     
     //constructor
     public EditableBufferedReader(){
-    
+        super(redear);
+        
     }
     
     //Funcions
@@ -58,9 +105,48 @@ public class EditableBufferedReader {
     
     //Primero debemos pasar a mode raw.
     this.setRaw();
-    // ahora debemos leer, por lo tanto nos devuelve un numero de la tabla ASCII
     int sim = super.read();
     //No se si debemos retornar este numero o debemos pasarle la traduccion?¿¿??¿?
-
+    if(sim == EditableBufferedReader.ESCAPE){
+        if(sim == EditableBufferedReader.EDICIO){
+            sim = super.read();
+            switch (sim){
+                case EditableBufferedReader.RIGHT:
+                    sim = EditableBufferedReader.RIGHT;
+                    break;
+                case EditableBufferedReader.LEFT:
+                    sim = EditableBufferedReader.LEFT;
+                    break;
+                case EditableBufferedReader.HOME:
+                    sim = EditableBufferedReader.HOME;
+                    break;
+                case EditableBufferedReader.END:
+                    sim = EditableBufferedReader.END;
+                    break;
+                case EditableBufferedReader.INSERT:
+                    sim = this.read();
+                    if (sim == EditableBufferedReader.TILDE)
+                        sim = EditableBufferedReader.INSERT;
+                    else
+                        sim = -1;
+                    break;
+                case EditableBufferedReader.DELETE:
+                    sim = this.read();
+                    if (sim == EditableBufferedReader.TILDE)
+                        sim = EditableBufferedReader.DELETE;
+                    else
+                        sim = -1;
+                    break;
+                case EditableBufferedReader.BACKSPACE:
+                    sim = ditableBufferedReader.BACKSPACE;
+                    break;
+                
+            }  
+           
+        }else{
+            sim =  EditableBufferedReader.ESCAPE;
+        }         
+    }
+    this.unsetRaw();
     } 
 }
