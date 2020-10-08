@@ -6,6 +6,9 @@
 package SADpractica1;
 
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.Reader;
+
 /**
  *
  * @author dat
@@ -58,12 +61,13 @@ public class EditableBufferedReader {
     static final int DELETE = 51;
     static final int BACKSPACE = 127;
     static final int TILDE = 126;
+    public static final int ENTER = 13; // Es necessita per Readline per acabar de llegir la line
     
-    
+    private Line l;
     //constructor
     public EditableBufferedReader(){
         super(redear);
-        
+        l = new Line();
     }
     
     //Funcions
@@ -98,6 +102,7 @@ public class EditableBufferedReader {
         }
     }
     
+    @Override
     public void read(){
     //llegeix el següent caràcter o la següent tecla de cursor.
     // Supongo ==> Este metodo se invoca solo si readline lo ejecuta. 
@@ -148,5 +153,57 @@ public class EditableBufferedReader {
         }         
     }
     this.unsetRaw();
-    } 
+    }
+    
+    @Override
+    public String readLine(){
+            
+        int i;
+        i=this.read();
+        
+        while(i!=ENTER){       
+            switch(i)
+            {
+                case 0:
+                    break;
+                    
+                case EditableBufferedReader.LEFT:
+                    l.left();
+                    break;
+                    
+                case EditableBufferedReader.RIGHT:
+                    l.right();
+                    break;
+                    
+                case EditableBufferedReader.END:
+                    l.end();
+                    break;
+                    
+                case EditableBufferedReader.HOME:
+                    l.home();
+                    break;
+                    
+                case EditableBufferedReader.INSERT:
+                    l.commuteInsert();
+                    break;
+                    
+                case EditableBufferedReader.DELETE:
+                    l.supr();
+                    break;
+                    
+                case EditableBufferedReader.BACKSPACE:
+                    l.bksp();
+                    break;
+                    
+                default:
+                    l.add(i);
+            }
+                   
+            i=this.read();
+        }
+        
+        return l.print();
+    }
 }
+
+
