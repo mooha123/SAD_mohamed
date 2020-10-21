@@ -25,15 +25,73 @@ public class Line {
         
     }
     
-     public boolean isIns() { //if true, inserts. If false substitueix
+     public boolean isIns() { //if true, inserts. If false no esborra
         return insert;
     }
         
     public void commuteInsert(){
-        if(this.ins){
-            this.ins=false;
+        //this.insert = !this.insert; 
+        //ho podriem fer així, pero no s'enten del tot. 
+        //es pot posar així més endevant
+        if(this.insert){
+            this.insert=false;
         }else{
-            this.ins=true;
+            this.insert=true;
         }
     }
+    public void add(int i){
+        if(insert){
+            buffer.set(pos, i);
+            pos++;
+        }else{
+            buffer.add(pos, i);
+            pos++;
+        }
+        
+    }
+    
+    public void right(){
+        if(pos < buffer.size()){
+            pos++;
+        }
+    }
+    
+    public void left(){
+        if(pos > 0){
+            pos--;
+        }
+    }
+    
+    public void home(){
+        pos = 0;
+    }
+    
+    public void end(){
+        pos = buffer.size();
+    }
+    
+    public void supr(){
+        if(pos < buffer.size()){
+            buffer.remove(pos);
+        }
+    }
+    
+    public void bksp(){
+        if(pos > 0){
+            pos--;
+            buffer.remove(pos);
+        }
+    }
+    
+    
+    //@Override
+    public String print(){
+        String s="";
+
+        for (Integer i : buffer) {
+            s=s+(char)i.intValue();
+        }
+
+        return s;
+    } 
 }

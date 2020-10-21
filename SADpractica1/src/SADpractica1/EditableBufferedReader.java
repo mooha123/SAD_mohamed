@@ -13,7 +13,7 @@ import java.io.Reader;
  *
  * @author dat
  */
-public class EditableBufferedReader {
+public class EditableBufferedReader extends BufferedReader{
     //Atributos
 /*
 27 79 70 0 end
@@ -52,7 +52,7 @@ public class EditableBufferedReader {
 40 0 openParen
 */
     static final int ESCAPE = 27;
-    static final int EDICIO = 27;
+    static final int EDICIO = 91;
     static final int RIGHT = 67;
     static final int LEFT = 68;
     static final int HOME = 72;
@@ -64,13 +64,16 @@ public class EditableBufferedReader {
     public static final int ENTER = 13; // Es necessita per Readline per acabar de llegir la line
     
     private Line l;
+    private Console cons;
     //constructor
-    public EditableBufferedReader(){
-        super(redear);
+    public EditableBufferedReader(Reader r){
+        super(r);
         l = new Line();
+        cons = new Console(l);
+        
     }
     
-    //Funcions
+    //Mètodes
     public void setRaw(){
         //Primero debo utilizar el comando  'stty -echo raw' en la terminal
         //para que se ejecute en un terminal utilizo bin/sh
@@ -102,8 +105,8 @@ public class EditableBufferedReader {
         }
     }
     
-    @Override
-    public void read(){
+    
+    public int read() throws IOException{
     //llegeix el següent caràcter o la següent tecla de cursor.
     // Supongo ==> Este metodo se invoca solo si readline lo ejecuta. 
     //tendremos que utilizar ASCII?¿?¿?¿
@@ -113,6 +116,7 @@ public class EditableBufferedReader {
     int sim = super.read();
     //No se si debemos retornar este numero o debemos pasarle la traduccion?¿¿??¿?
     if(sim == EditableBufferedReader.ESCAPE){
+        sim = super.read();
         if(sim == EditableBufferedReader.EDICIO){
             sim = super.read();
             switch (sim){
@@ -143,7 +147,7 @@ public class EditableBufferedReader {
                         sim = -1;
                     break;
                 case EditableBufferedReader.BACKSPACE:
-                    sim = ditableBufferedReader.BACKSPACE;
+                    sim = EditableBufferedReader.BACKSPACE;
                     break;
                 
             }  
@@ -153,10 +157,10 @@ public class EditableBufferedReader {
         }         
     }
     this.unsetRaw();
+        return 0;
     }
     
-    @Override
-    public String readLine(){
+    public String readLine() throws IOException{
             
         int i;
         i=this.read();
@@ -204,6 +208,8 @@ public class EditableBufferedReader {
         
         return l.print();
     }
+    
+
 }
 
 
