@@ -1,18 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package SADpractica1;
-
+import java.io.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 
-/**
- *
- * @author dat
- */
+
 public class EditableBufferedReader extends BufferedReader{
     //Atributos
 /*
@@ -61,16 +52,13 @@ public class EditableBufferedReader extends BufferedReader{
     static final int DELETE = 51;
     static final int BACKSPACE = 127;
     static final int TILDE = 126;
-    public static final int ENTER = 13; // Es necessita per Readline per acabar de llegir la line
+    static final int ENTER = 13; // Es necessita per Readline per acabar de llegir la line
     
     private Line l;
-    private Console cons;
     //constructor
     public EditableBufferedReader(Reader r){
         super(r);
-        l = new Line();
-        cons = new Console(l);
-        
+        l = new Line();        
     }
     
     //Mètodes
@@ -82,10 +70,9 @@ public class EditableBufferedReader extends BufferedReader{
         //     parameter 0 will be set from the command_name op‐
         //     erand and the positional parameters ($1, $2, etc.)
         //     set from the remaining argument operands.
-
+	try{
         String[] cadena = {"/bin/sh", "-c", "stty -echo raw </dev/tty"};
         //confirmar que se ha podido pasar!
-        try{
             Runtime.getRuntime().exec(cadena).waitFor();
         }catch(Exception e){
                 System.out.println("Not put Terminal in raw mode");
@@ -96,9 +83,9 @@ public class EditableBufferedReader extends BufferedReader{
     public void unsetRaw(){
         //passa la consola de mode raw a mode cooked.
         //lo mismo que el setraw
+	try{
         String[] cadena = {"/bin/sh", "-c", "stty -echo raw </dev/tty"};
         //confirmar que se ha podido pasar!
-        try{
             Runtime.getRuntime().exec(cadena).waitFor();
         }catch(Exception e){
             System.out.println("Not put Terminal in cooked mode");
@@ -106,107 +93,112 @@ public class EditableBufferedReader extends BufferedReader{
     }
     
     
+    @Override	 
     public int read() throws IOException{
-    //llegeix el següent caràcter o la següent tecla de cursor.
-    // Supongo ==> Este metodo se invoca solo si readline lo ejecuta. 
-    //tendremos que utilizar ASCII?¿?¿?¿
-    
-    //Primero debemos pasar a mode raw.
+
     this.setRaw();
-    int sim = super.read();
-    //No se si debemos retornar este numero o debemos pasarle la traduccion?¿¿??¿?
-    if(sim == EditableBufferedReader.ESCAPE){
-        sim = super.read();
-        if(sim == EditableBufferedReader.EDICIO){
-            sim = super.read();
-            switch (sim){
-                case EditableBufferedReader.RIGHT:
-                    sim = EditableBufferedReader.RIGHT;
-                    break;
-                case EditableBufferedReader.LEFT:
-                    sim = EditableBufferedReader.LEFT;
-                    break;
-                case EditableBufferedReader.HOME:
-                    sim = EditableBufferedReader.HOME;
-                    break;
-                case EditableBufferedReader.END:
-                    sim = EditableBufferedReader.END;
-                    break;
-                case EditableBufferedReader.INSERT:
-                    sim = this.read();
-                    if (sim == EditableBufferedReader.TILDE)
-                        sim = EditableBufferedReader.INSERT;
-                    else
-                        sim = -1;
-                    break;
-                case EditableBufferedReader.DELETE:
-                    sim = this.read();
-                    if (sim == EditableBufferedReader.TILDE)
-                        sim = EditableBufferedReader.DELETE;
-                    else
-                        sim = -1;
-                    break;
-                case EditableBufferedReader.BACKSPACE:
-                    sim = EditableBufferedReader.BACKSPACE;
-                    break;
-                
-            }  
-           
-        }else{
-            sim =  EditableBufferedReader.ESCAPE;
-        }         
-    }
-    this.unsetRaw();
-        return 0;
+    int sim = super.read();	
+    try{
+	    
+		    if(sim == EditableBufferedReader.ESCAPE){
+			sim = super.read();
+			if(sim == EditableBufferedReader.EDICIO){
+			    sim = super.read();
+			    switch (sim){
+				case EditableBufferedReader.RIGHT:
+				    sim = EditableBufferedReader.RIGHT;
+				    break;
+				case EditableBufferedReader.LEFT:
+				    sim = EditableBufferedReader.LEFT;
+				    break;
+				case EditableBufferedReader.HOME:
+				    sim = EditableBufferedReader.HOME;
+				    break;
+				case EditableBufferedReader.END:
+				    sim = EditableBufferedReader.END;
+				    break;
+				case EditableBufferedReader.INSERT:
+				    sim = this.read();
+				    if (sim == EditableBufferedReader.TILDE)
+				        sim = EditableBufferedReader.INSERT;
+				    else
+				        sim = -1;
+				    break;
+				case EditableBufferedReader.DELETE:
+				    sim = this.read();
+				    if (sim == EditableBufferedReader.TILDE)
+				        sim = EditableBufferedReader.DELETE;
+				    else
+				        sim = -1;
+				    break;
+				case EditableBufferedReader.BACKSPACE:
+				    sim = EditableBufferedReader.BACKSPACE;
+				    break;
+				
+			    }  
+			   
+			}else{
+			    sim =  EditableBufferedReader.ESCAPE;
+			}         
+		    }
+	    }catch (Exception e) {
+
+	    } finally {
+	    this.unsetRaw();
+	}
+        return sim;
     }
     
+    @Override
     public String readLine() throws IOException{
             
         int i;
         i=this.read();
+	try{
         
-        while(i!=ENTER){       
-            switch(i)
-            {
-                case 0:
-                    break;
-                    
-                case EditableBufferedReader.LEFT:
-                    l.left();
-                    break;
-                    
-                case EditableBufferedReader.RIGHT:
-                    l.right();
-                    break;
-                    
-                case EditableBufferedReader.END:
-                    l.end();
-                    break;
-                    
-                case EditableBufferedReader.HOME:
-                    l.home();
-                    break;
-                    
-                case EditableBufferedReader.INSERT:
-                    l.commuteInsert();
-                    break;
-                    
-                case EditableBufferedReader.DELETE:
-                    l.supr();
-                    break;
-                    
-                case EditableBufferedReader.BACKSPACE:
-                    l.bksp();
-                    break;
-                    
-                default:
-                    l.add(i);
-            }
-                   
-            i=this.read();
-        }
-        
-        return l.print();
+		while(i!=EditableBufferedReader.ENTER){       
+		    		
+		    switch(i)
+		    {       
+		        case EditableBufferedReader.LEFT:
+		            this.l.left();
+		            break;
+		            
+		        case EditableBufferedReader.RIGHT:
+		            this.l.right();
+		            break;
+		            
+		        case EditableBufferedReader.END:
+		            this.l.end();
+		            break;
+		            
+		        case EditableBufferedReader.HOME:
+		            this.l.home();
+		            break;
+		            
+		        case EditableBufferedReader.INSERT:
+		            this.l.commuteInsert();
+		            break;
+		            
+		        case EditableBufferedReader.DELETE:
+		            this.l.supr();
+		            break;
+		            
+		        case EditableBufferedReader.BACKSPACE:
+		            this.l.bksp();
+		            break;
+		            
+		        default:
+		            this.l.add(i);
+			    System.out.print(l.getchar(i));
+		    }	      
+		    
+		    i=this.read();
+		}
+        }catch (IOException e) {
+            e.printStackTrace();
+        } 
+        return this.l.print();
     }
     
 

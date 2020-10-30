@@ -1,16 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package SADpractica1;
-
+import java.io.*;
 import static java.lang.Boolean.FALSE;
 import java.util.ArrayList;
 
 /**
  *
- * @author Anna
+ * @author Anna_Mohamed
  */
 public class Line {
     private ArrayList<Integer> buffer;
@@ -40,7 +34,7 @@ public class Line {
         }
     }
     public void add(int i){
-        if(insert){
+        if(this.insert){
             buffer.set(pos, i);
             pos++;
         }else{
@@ -83,8 +77,10 @@ public class Line {
         }
     }
     
-    
-    //@Override
+     public char getchar(int s){
+        return (char)s;
+    } 
+  
     public String print(){
         String s="";
 
