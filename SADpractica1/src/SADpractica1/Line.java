@@ -7,23 +7,87 @@ import java.util.ArrayList;
  * @author Anna_Mohamed
  */
 public class Line {
-    private ArrayList<Integer> buffer;
+    public static int maxLength = 1200;
+
+
+    private StringBuffer buffer;
     private int pos;
-    private boolean insert;
+    private boolean insert = false;
+    private boolean home = true;
+
     
     public Line(){
-        this.buffer = new ArrayList<>();
+        this.buffer = new StringBuffer(this.maxLength);
         this.pos = 0;
-        this.insert = FALSE; //LA TECLA INSERT ESTÀ DESACTIVADA X DEFECTE I 
-        //PER TANT, NO ESBORRA EL CARACTER QUAN ESCRIUS
-        
+ 
     }
     
      public boolean isIns() { //if true, inserts. If false no esborra
         return insert;
     }
         
-    public void commuteInsert(){
+
+    public int getPos(){
+        return this.pos;
+    }
+
+    public void setPos(int posicio){
+        if (posicio == 0)
+            this.home = true;
+        this.pos = posicio;
+    }
+
+    public String getLine(){
+        return this.buffer.toString();
+    }
+
+    public void add(char c){
+        if(this.insert){
+	    if(pos < buffer.length()){
+            	this.buffer.deleteCharAt(this.pos); 	
+		}	  
+        }
+	this.buffer.insert(this.pos, c);
+	this.pos++;
+        
+    }
+    
+    public void right(){
+        if(pos < buffer.length()){
+            pos++;
+        }
+    }
+    
+    public void left(){
+        if(pos > 0){
+            pos--;
+        }
+        if (this.pos == 0)
+            this.home = true;
+    }
+    
+    public void home(){
+        pos = 0;
+    }
+    
+    public void end(){
+        pos = buffer.length();
+    }
+    
+    public void supr(){
+        if(pos < buffer.length()){
+            buffer.deleteCharAt(pos);
+        }
+    }
+    
+    public void bksp(){
+        if(pos > 0){
+            pos--;
+            buffer.deleteCharAt(pos);
+        }
+    }
+
+   public void commuteInsert(){
         //this.insert = !this.insert; 
         //ho podriem fer així, pero no s'enten del tot. 
         //es pot posar així més endevant
@@ -33,61 +97,28 @@ public class Line {
             this.insert=true;
         }
     }
-    public void add(int i){
-        if(this.insert){
-            buffer.set(pos, i);
-            pos++;
-        }else{
-            buffer.add(pos, i);
-            pos++;
-        }
-        
-    }
-    
-    public void right(){
-        if(pos < buffer.size()){
-            pos++;
-        }
-    }
-    
-    public void left(){
-        if(pos > 0){
-            pos--;
-        }
-    }
-    
-    public void home(){
-        pos = 0;
-    }
-    
-    public void end(){
-        pos = buffer.size();
-    }
-    
-    public void supr(){
-        if(pos < buffer.size()){
-            buffer.remove(pos);
-        }
-    }
-    
-    public void bksp(){
-        if(pos > 0){
-            pos--;
-            buffer.remove(pos);
-        }
-    }
     
      public char getchar(int s){
         return (char)s;
     } 
   
-    public String print(){
-        String s="";
+    public String getDisplayString() {
+        StringBuilder displayString = new StringBuilder();
+        displayString.append((char) 27);
+        displayString.append("[2K");
+        displayString.append('\r');
+        displayString.append(this.buffer.toString());
+        displayString.append(' ');
+        displayString.append("\033[" + (1 + this.buffer.length() - pos) + "D");
+        return displayString.toString();
+    }
+   // public String print(){
+  //      String s="";
+//
+   //     for (Integer i : buffer.length()) {
+ //           s=s+(char)i.intValue();
+    //    }
 
-        for (Integer i : buffer) {
-            s=s+(char)i.intValue();
-        }
-
-        return s;
-    } 
+   //     return s;
+  //  } 
 }

@@ -58,7 +58,7 @@ public class EditableBufferedReader extends BufferedReader{
     //constructor
     public EditableBufferedReader(Reader r){
         super(r);
-        l = new Line();        
+        this.l = new Line();        
     }
     
     //Mètodes
@@ -71,7 +71,7 @@ public class EditableBufferedReader extends BufferedReader{
         //     erand and the positional parameters ($1, $2, etc.)
         //     set from the remaining argument operands.
 	try{
-        String[] cadena = {"/bin/sh", "-c", "stty -echo raw </dev/tty"};
+        String[] cadena = {"/bin/sh", "-c", "stty raw </dev/tty"};
         //confirmar que se ha podido pasar!
             Runtime.getRuntime().exec(cadena).waitFor();
         }catch(Exception e){
@@ -84,7 +84,7 @@ public class EditableBufferedReader extends BufferedReader{
         //passa la consola de mode raw a mode cooked.
         //lo mismo que el setraw
 	try{
-        String[] cadena = {"/bin/sh", "-c", "stty -echo raw </dev/tty"};
+        String[] cadena = {"/bin/sh", "-c", "stty sane </dev/tty"};
         //confirmar que se ha podido pasar!
             Runtime.getRuntime().exec(cadena).waitFor();
         }catch(Exception e){
@@ -95,10 +95,10 @@ public class EditableBufferedReader extends BufferedReader{
     
     @Override	 
     public int read() throws IOException{
-
-    this.setRaw();
-    int sim = super.read();	
-    try{
+         this.setRaw();    
+         int sim = super.read();	
+    
+         try{
 	    
 		    if(sim == EditableBufferedReader.ESCAPE){
 			sim = super.read();
@@ -146,15 +146,18 @@ public class EditableBufferedReader extends BufferedReader{
 	    } finally {
 	    this.unsetRaw();
 	}
+	
         return sim;
     }
     
     @Override
     public String readLine() throws IOException{
-            
-        int i;
-        i=this.read();
+        
+	
+        int i = -1;
+        
 	try{
+		i=this.read();
         
 		while(i!=EditableBufferedReader.ENTER){       
 		    		
@@ -189,18 +192,21 @@ public class EditableBufferedReader extends BufferedReader{
 		            break;
 		            
 		        default:
-		            this.l.add(i);
-			    System.out.print(l.getchar(i));
+		            this.l.add((char)i);
+			    
 		    }	      
-		    
-		    i=this.read();
+//		    System.out.print(l.getchar(i));	
+		    System.out.print(l.getDisplayString());
+		    i=this.read();	
+		   
 		}
         }catch (IOException e) {
             e.printStackTrace();
         } 
-        return this.l.print();
+
+        return this.l.getLine();
     }
-    
+	    
 
 }
 
