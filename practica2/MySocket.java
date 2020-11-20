@@ -23,7 +23,7 @@ public class MySocket {
     private String nick;
     private Socket s;
     
-    public MySocket (String cliente1, String cliente2) throws IOException{
+    public MySocket (String nick) throws IOException{
         try {
             s = new Socket(HOST_NAME, PORT);
             this.in = new BufferedReader(new InputStreamReader(s.getInputStream()));
@@ -33,17 +33,18 @@ public class MySocket {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        this.nick = nick;
     }
     public void enviarMensaje(final String message) {
-        out.println(message);
-    }
+        out.print(nick + " " + message);
+    }   
     public String recibirMensaje() throws IOException {
         return in.readLine();
     }
     
-//    public void close () throws IOException{
-//        in.close();
-//        out.close();
-//        s.close();
-//    }
+    public void close () throws IOException{
+        in.close();
+        out.close();
+        s.close();
+    }
 }
