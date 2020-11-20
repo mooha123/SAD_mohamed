@@ -11,6 +11,7 @@ import java.io.IOException;
  * @author moham
  */
 public class Server {
+    
     public static void main(String args[]) throws IOException {
         MyServerSocket serverSocket = new MyServerSocket(6666);
         serverSocket.listen();
