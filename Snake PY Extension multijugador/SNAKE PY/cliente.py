@@ -72,10 +72,11 @@ class main():
 
             print(score1)
             print(score2)
-            if go:
+            if go: #and (p2.steps == p1.steps):
                 s.move(apple, normal)
                 #s2.move(apple, normal)
                 s2.moveS2(apple, p2)
+                #p1.steps += p1.steps
 
             window.update(all_sprites, score1)
             clock.tick(velocitat)
@@ -85,7 +86,6 @@ class main():
             #si como debo cambio la posicion de apple, por tanto, debo cambiar p2 y p1
             if s.eaten:
                 p1.applePos = apple.getPos()
-                #p2.applePos = apple.getPos()
 
             p2 = n.send(p1)
             go = p2.start

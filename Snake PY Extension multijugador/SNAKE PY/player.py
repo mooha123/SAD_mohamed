@@ -12,6 +12,7 @@ class Player (object): # el Player va a tener las posiciones de todos los objeto
         self.direction = [1, 0]
         self.ok = True
         self.start = False
+        self.steps = 0
 
     def getPosHead(self):
         return self.posHead

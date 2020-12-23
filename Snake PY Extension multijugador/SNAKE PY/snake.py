@@ -78,9 +78,7 @@ class Apple(pygame.sprite.Sprite):
         self.rect.y = player.applePos[1]
 
 class Snake(object):
-    body_group = pygame.sprite.Group()
     #snake2 = pygame.sprite.Group()
-    body = []
     #body2 = []
 
     def __init__(self, pos, color, oponent=False):
@@ -91,6 +89,7 @@ class Snake(object):
         #if oponent:
         #    self.snake2.add(self.head)
         #else:
+        self.body_group = pygame.sprite.Group()
         self.body_group.add(self.head)
         all_sprites.add(self.head)
         self.direction = [1, 0]
@@ -99,6 +98,7 @@ class Snake(object):
         self.key = controller_snake.Detection()
         self.ok = True
         self.color = color
+        self.body = []
 
     # Aquesta es la funcio principal que fa que a cada tic de rellotge la serp es mogui i es on apliquem
     # la deteccio de colisions, l'augment del tamany de la serp y es llegeix la tecla que es prem per
