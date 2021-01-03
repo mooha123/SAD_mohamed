@@ -1,0 +1,123 @@
+# Pràctica 1 - Primera part
+
+La primera part de la pràctica basa en fer una aplicació no basada en MVC. Dit això, l'aplicació
+tracta en entendre el que premem pel teclat i si hem de moure el cursor o esborrar caracters
+premesos anteriorment.
+
+### ## Introducció
+Per tal de fer una bona explicació de les dos parts de la pràctica, aquesta primera part serà
+més extesa i entenedora, i en canvi, la segona part es comentaran els canvis aplicats perquè
+funcioni el model.
+
+### EditableBufferedReader
+
+public void setRaw()
+public void unsetRaw()
+
+Aquests dos mètodes es poden comentar conjuntament ja que un es el contrari de l'altre. Pel
+que fa al* setRaw()* serveix per posar el terminal en mode lectrura i poder entendre el
+caracter premut per l'usuari. Contrariament, el mètode *unsetRaw()* posa el mode de no
+lectura al terminal.
+
+public int read()
+
+Aquest mètode serveix per saber quin caracter s'ha premut. I s'executa cada cop que es prem
+una tecla. Primer de tot, es posa en mode lectura. Posteriorment, com que la classe
+***EditableBufferedReader*** exten de ***BufferedReader***, el primer que es fa en el
+mètode és:
+
+> this.setRaw();
+int sim = super.read();int sim = super.read();
+
+Ara a la variable ***sim*** té el valor del caràcter premut. Llavors, ara hem de descobrir si és
+un caracter qualsevol és alguna tecla que impliqui un canvi del cursor o de la linia total. Les
+tecles que requereixen d'una acció posterior són les següents: ***left, right, bskp, del, end,
+home o enter*** (cada acció s'explicarà més detingudament en la classe** Line**)
+Per tant, el següent pas és descobrir quines de les següent tecles s'han premut. Jugant amb les
+eines de programació com el* if* i el *switch* descobrim quina tecla s'ha premut.
+Finalment retornem el valor que s'hagi premut i s'executa el metode
+
+> this.unsetRaw();
+
+public String readLine()
+
+Aquest mètode el que fa és anar aumentant la linia i executant els mètodes que pertoquen per
+cada tecla diferent. Primer de tot, executa el mètode *read()* .
+Posteriorment mira que ha retornat el mètode i executa els metodes corresponents, és a dir,
+que si s'ha premut la tecla *end*, el cursor es mou al final de la linia i així amb totes les
+opcions disponibles.
+A més a més, printa la frase cada cop que tenim nou caràcter ja que així és més senzill per
+representar els canvis; aixo ho fa executant la següent línia
+
+> System.out.print(l.getDisplayString())
+
+Finalment, retorna la frase sencera ja que és el metode que s'executa en ***TestReadLine***
+
+### Line
+En aquesta clase s’executen les accions pertinents a cada tecla premuda, els mètodes són molt
+senzills així que hi farem un pinzellada per tal de veure’ls tots una mica per sobre.
+
+public boolean isIns()
+public int getPos()
+public void setPos(int posicio)
+public String getLine()public String getLine()
+
+Aquests quatre mètodes són els mes bàsics ja que unicament et retornen l’atribut preguntat o
+estableixen el valor passat per argument al atribut.
+
+public void add(char c)
+
+La complicació d’aquest mètode és que si la tecla *insert* està premuda (reescrivim sobre el
+caràcter àntic) hem d’esborrar el caràcter antic i escriure el nou; es fa amb un if que pregunta
+en quin *“mode”* estem per tal de fer una cosa o altre. També augmenta la posició.
+
+public void right()
+
+Aquest mètode mou el cursor a la dreta sempre i quan el cursor no estigui a final de línia ja
+que no tindria sentit.
+
+public void left()
+
+Igual que anteriorment, aquest mètode mou el cursor a l’esquerra sempre i quan el cursor no
+estigui al principi de línia ja que no tindria sentit.
+
+public void home()
+public void end()
+
+Aquests dos mètodes mouen el cursor al principi o al final respectivament, sense tenir en
+compte on estigui el cursor.
+
+public void supr()
+
+Aquest mètode esborra el caràcter que hi ha davant del cursor.
+
+public void bksp()
+
+En canvi, aquest mètode esborra el caràcter que hi ha en la posició anterior al cursor.
+
+public void commuteInsert()
+
+Aquest mètode s’executa quan es prem la tecla insert. S’ha de canviar de “mode”. Cal
+comentar que per inicialització nostre, sempre es comença amb el “mode” no insert. I a
+mesura que es va prement es va conmutant.
+
+public String getDisplayString()
+
+Aquest mètode ja s’ha comentat anteriorment a la descripció de la classe
+d’EditableBufferedReader. Consisteix en printar la frase. El que passa, és que s’executa cada
+cop que es prem una tecla i s’han d’entendre les seves línies ja que no es printa la frase cada
+cop que es prem una tecla. L’objectiu és printar la frase actualitzada cada cop de manera que
+cada actualització, esborra la frase antiga i printa la nova. Posem el codi per tal d’ajudar-nos
+amb l’explicació:
+
+> displayString.append((char)27);
+displayString.append("[2K");
+displayString.append('\r');
+displayString.append(this.buffer.toString());
+displayString.append(' ');
+displayString.append("\033[" + (1 + this.buffer.length() - pos) + "D");
+
+### TestReadLine
+
+Aquesta classe és el main de l’aplicació i es veu com executa el mètode de readLine()
+permanentment fins que l’usuari prem la tecla ***ENTER.***
