@@ -1,0 +1,11 @@
+# Pràctica 1 - Segona part
+
+Com ja hem comentat anteriorment, aquesta explicació es basara en els canvis que vem aplicar perquè el model MVC funcionés.
+
+Per fer-ho hem creat dues noves classes que es diuen** *Console* ** i** *constants.***
+
+Per començar, la classe constants és basicament una classe que ens serveix per deixar constància de quina "tecla" s'ha premut. És a dir, que quan premem una tecla que impliqui una acció, activem una variable perquè despres des de ***Console*** es pugui executar el mètode corresponent.
+
+Hem afegit a cada metode de ***Line*** que impliqui una acció, el mètode *notify()* que fa que l'Observer es notifiqui i fagi l'acció pertinent.
+
+Finalment, a la classe ***Console*** hem afegit el mètode *update()* i així s'actualitza l'Observable fent l'acció pertinent.
