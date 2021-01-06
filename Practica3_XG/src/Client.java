@@ -27,6 +27,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 public class Client{
     
+    private boolean conectado = false;
+    private MySocket socket;
     String      appName     = "Chat en Swing";
     Client   mainGUI;
     JFrame      newFrame    = new JFrame(appName);
@@ -38,8 +40,7 @@ public class Client{
     JButton     btEnviar;
     JList       lista;
     DefaultListModel model;
-    private boolean conectado = false;
-    private MySocket socket;
+
     
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {

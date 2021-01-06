@@ -1,47 +1,68 @@
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.Socket;
-import java.net.UnknownHostException;
-
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author moham
  */
 public class MySocket extends Socket{
-        public static final String HOST_NAME = "localhost";
-    public static final int PORT = 6666;
-    
-    private BufferedReader in;
-    private PrintWriter out;
-    private String nick;
-    private Socket s;
-    
-    public MySocket (String nick) throws IOException{
-        try {
-            s = new Socket(HOST_NAME, PORT);
-            this.in = new BufferedReader(new InputStreamReader(s.getInputStream()));
-            this.out = new PrintWriter(s.getOutputStream(), true);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        this.nick = nick;
-    }
-    public void enviarMensaje(final String message) {
-        out.print(nick + " " + message);
-    }   
-    public String recibirMensaje() throws IOException {
-        return in.readLine();
-    }
-    
-    public void close () throws IOException{
-        in.close();
-        out.close();
-        s.close();
-    }
-}
 
+    Socket s;
+    BufferedReader in;
+    PrintWriter out;
+    
+    public MySocket(String host, int port){
+        try {
+            this.s = new Socket(host, port);
+            in = new BufferedReader(new InputStreamReader(s.getInputStream()));
+            out = new PrintWriter(new OutputStreamWriter(s.getOutputStream()));
+        } catch (IOException ex) {
+            Logger.getLogger(MySocket.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    public MySocket(Socket socket){
+        try{
+            this.s = socket;
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new PrintWriter(socket.getOutputStream());
+        }catch (IOException ex) {
+            Logger.getLogger(MySocket.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+        
+    public void println(String st){
+        out.println(st);
+        out.flush();
+    }
+
+    public String readLine() {
+        String st = null;
+        try {
+            st = this.in.readLine();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return st;
+    }
+       
+       
+    @Override
+    public void close(){
+        try {
+            s.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+    public String read() throws IOException{
+        String linia = in.readLine();
+        return linia;
+    }
+ }

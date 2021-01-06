@@ -2,7 +2,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
- * @author moham
+ * @author virtual
  */
 public class Server implements Runnable {
 
@@ -12,9 +12,9 @@ public class Server implements Runnable {
     MySocket s;
     String nombre;
 
-    Server(String nombre, MySocket s) {
+    Server(String nick, MySocket s) {
         this.s = s;
-        this.nombre = nombre;
+        this.nombre = nick;
     }
 
     public static void main(String[] args) throws Exception {
