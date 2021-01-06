@@ -25,8 +25,28 @@ public class Console implements Observer{
     //s'ha de ficar aquesta funció ja que s'implementa de observer!!
     
     // @Override
-    //public void update(Observable o, Object arg) {  //fem un switch case o ifs i cridem a les funcions d'abaix!!
+    public void update(Observable o, Object arg) {  //fem un switch case o ifs i cridem a les funcions d'abaix!!
+   
+        Constants k = (Constants)arg;
+        
+        if(k.isLeft()){
+            this.left();
+        }
+
+        if(k.isRight()){
+            this.right();
+        }
+
+        if(k.isSupr()){
+            this.supr();
+        }
+
+        if(k.isBksp()){
+            this.bksp();
+        }
+        
     
+    }
     
     
     public void left(){ //move cursor one pos left
@@ -35,6 +55,7 @@ public class Console implements Observer{
         System.out.print((char)68);
     }
 
+    //borrar
     private void left(int i){ //move cursor i pos left
         for (int j = 0; j < i; j++) {
             this.left();
@@ -47,6 +68,7 @@ public class Console implements Observer{
         System.out.print((char)67);
     }
    
+    //borrar
     private void right(int i){ //move cursor i pos right
         for (int j = 0; j < i; j++) {
             this.right();

@@ -51,16 +51,16 @@ public class EditableBufferedReader extends BufferedReader{
 38 0 ampersand
 40 0 openParen
 */
-    static final int ESCAPE = 27;
-    static final int EDICIO = 91;
-    static final int RIGHT = 67;
-    static final int LEFT = 68;
-    static final int HOME = 72;
-    static final int END = 70;
-    static final int INSERT = 50;
-    static final int DELETE = 51;
-    static final int BACKSPACE = 127;
-    static final int TILDE = 126;
+    public static final int ESCAPE = 27;
+    public static final int EDICIO = 91;
+    public static final int RIGHT = 67;
+    public static final int LEFT = 68;
+    public static final int HOME = 72;
+    public static final int END = 70;
+    public static final int INSERT = 50;
+    public static final int DELETE = 51;
+    public static final int BACKSPACE = 127;
+    public static final int TILDE = 126;
     public static final int ENTER = 13; // Es necessita per Readline per acabar de llegir la line
     
     private Line l;
@@ -70,6 +70,7 @@ public class EditableBufferedReader extends BufferedReader{
         super(r);
         l = new Line();
         cons = new Console(l);
+        l.addObserver(cons);
         
     }
     
@@ -157,7 +158,7 @@ public class EditableBufferedReader extends BufferedReader{
         }         
     }
     this.unsetRaw();
-        return 0;
+        return sim;
     }
     
     public String readLine() throws IOException{
