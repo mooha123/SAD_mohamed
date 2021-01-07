@@ -1,0 +1,59 @@
+# Practica 2
+
+### MySocket
+
+Com una classe Socket, té un BufferedReader i un PrintWriter, a més a més, també tens un atribut que és el nick del usuari que es connecti.
+
+public void enviarMensaje(final String message)
+
+El métode que s'executa cada cop que volem enviar un missatge.
+
+public String recibirMensaje()
+
+El mètode que s'executa al rebre un missatge
+
+public void close ()
+
+El mètode que s'executa quan es tanca la connexió.
+
+## MyServerSocket
+
+La classe té com atributs un ServerSocket com a tal i un Mapa amb tots els sockets que estan connectats al servidor amb el nick corresponent com a clau.
+
+public void listen()
+
+Aquest mètode funciona per posar en mode escoltant al servidor.
+
+### ControlThread
+
+Aquesta classe té com objectiu saber gestionar el thread en si, és a dir, el control de cada usuari, la seva innicialització i el seu tancament.
+
+public void run()
+
+Começa la connexió i per tant, sabem el nick de l'origen i el nick remot (del destí). Preguntem si el nick s'esta utilitzant, si no és així, l'afegim en el mapa del MyServerSocket, i posteriorment creem dos developers que seran com els canals de cada sentit de la connexió.
+
+### Developer
+
+Aquesta classe gestiona els missatges d'entrada i sortida de cada usuari.
+
+public void run()
+
+Lusuari rep el missatge, es printa per pantalla, i escriu la resposta. Aquesta resposta és enviada. Finalment, quan s'acaba la connexió; es tanquen els threads.
+
+## Client
+
+Aquesta classe és l'usuari en si. Com funciona i com es relaciona amb el servidor.
+
+### ReaderThread
+
+És el thread que llegeix els missatges que reb l'usuari.
+
+### WriterThread
+
+És el thread que guarda els missatges que escriu l'usuari i posteriorment els envia.
+
+### main
+
+Crea el socket pertinent al usuari, despres crea el seu BufferedReader i una línia d'String. Comprova que el nick no s'estigui utilitzant i posterior ment crea els dos threads esmentats abans que seran els dos que rebran i enviaran els missatges (ReaderThread i WriterThread).
+Mentres la línia no sigui null continua la connexió.
+Quan aquesta és null es desconnecta, i es tanquen tots els threads.
