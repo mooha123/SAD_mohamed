@@ -1,0 +1,47 @@
+# Pràctica 3
+
+### MySocket
+
+Com una classe Socket, té un BufferedReader i un PrintWriter, a més a més, també tens un atribut que és de classe Socket
+
+public void println(String st)
+El mètode que fa que el missatge es printi per la pantalla
+
+public String readLine()
+És el mètode més bàsic per llegir la línia
+
+public void close()
+Tanca la connexió del socket
+
+public String read()
+El mètode que executa el readLine() per tal de saber la línia sencera
+## MyServerSocket
+
+Té un atribut, i és un mysocket. Té dos mètodes, un d'*accept()* i un de *close()* . Cada un funciona per començar o acabar la connexió respectivament.
+
+## Client
+
+Primer de tot hi ha el *main* de l'aplicació, aquest, serà el que executarà els incis perquè l'aplicació funcioni.
+
+public void preDisplay()
+public void display()
+
+Aquests dos mètodes funcionen perquè el que es printi per pantalla sigui el missatge entenador i clar. A més a més, podem fer veure com fem jocs amb les mides i els icones diferents on podem premer i que impliquen una acció.
+
+## class sendMessageButtonListener i class enterServerButtonListener
+
+Aquestes dos classes son les encarregades en guardar el missatge, ensenyar-lo i enviar-lo quan quan s'hagi acabat d'escriure
+
+## class OutputThread
+
+Aquesta classe es el thread en si, l'usuari. Les primeres línies defineixen el seu mètode *run()* on es veu com va enviant el missatge i/o llegint, sempre i quan estigui connectat.
+El mètode *close()* funciona per quan l'usuari es vol desconnectar; ja que s'ha de tancar el thread creat.
+
+public void updateUsers()
+
+Aquest mètode funciona per mostrar els usuaris connectats. Com que estem a client, el que fem és actualitzar el mateix socket i dir en quin estat estem (si connectats o desconnectats).
+
+## Server
+
+És una classe thread i per tant, tindrà un *main* i un *run()*. Primer de tot, tenim el mètode main.  En aquest, podem veure com funcionarà la classe. En el *run()* veiem com funcionarà el server en si com a thread (com a individual).
+També hi ha un mètode *darLista()* on podem veure els usuaris (sockets) del servidor.
